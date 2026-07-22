@@ -1,1 +1,104 @@
 
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Premium TV Player</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+body{margin:0;font-family:Arial;background:linear-gradient(135deg,#08131f,#1d3557);color:#fff}.c{max-width:980px;margin:auto;padding:18px}
+video{width:100%;border-radius:18px;border:2px solid #6ee7ff;box-shadow:0 0 25px #00d4ff;background:#000;position:sticky;top:0;z-index:999}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px;margin:16px 0;height:70vh;overflow-y:auto}.card{background:#10233d;border:1px solid #38bdf8;border-radius:16px;padding:10px;text-align:center;cursor:pointer}.card img{width:70px;height:70px;object-fit:contain;border-radius:12px;background:#fff;padding:4px}.card .n{margin-top:8px;font-weight:bold;font-size:14px}
+.b{padding:12px 18px;border:none;border-radius:14px;
+background:linear-gradient(270deg,#7c3aed,#2563eb,#06b6d4,#7c3aed);
+background-size:400% 400%;animation:bg 5s ease infinite;
+color:transparent;font-weight:bold;
+background-clip:padding-box;
+box-shadow:0 8px 18px rgba(0,0,0,.5),0 0 15px #38bdf8}
+.b{position:relative}
+.b::span{}
+.b{ -webkit-text-fill-color: initial;color:#fff;text-shadow:0 0 8px #fff;}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.b:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 0 18px #60a5fa}
+.s{text-align:center}.s a{display:inline-block;margin:8px;padding:12px 18px;border-radius:30px;color:#fff;text-decoration:none;animation:p 1.8s infinite}
+.fb{background:#1877f2}.wa{background:#25d366}@keyframes p{50%{transform:scale(1.08)}}
+</style></head><body><div class=c><h2>✨ Premium Live Player</h2><video id=v controls playsinline></video>
+<div class=grid id='grid'></div><div class=s>
+<a class='fb' href='https://www.facebook.com/' target='_blank'><i class='fab fa-facebook-f'></i> Facebook</a>
+<a class='wa' href='https://wa.me/' target='_blank'><i class='fab fa-whatsapp'></i> WhatsApp</a></div></div>
+<script src='https://cdn.jsdelivr.net/npm/hls.js@latest'></script><script>
+const channels=[
+{name:'FiFA LIVE',logo:'https://cdn.phototourl.com/free/2026-07-15-be4f9833-62a9-4e56-8c75-f3d3b9412f54.jpg',url:'https://tfxl0gr5domt1gc41hctogezd1cjpptwzc3jt.100ycdn.com/live1.streambylivepulse.com/live/channel1/playlist.m3u8?wsSecret=d279c6097dbca555ed36b0233713642d&wsSession=7a420697ad2a20ffc53441cf-178414572492475&wsIPSercert=f91d04aa3985b0c72e855eb1524dfb6a&wsBindIP=2&wsserid=1168273349992270251'},
+{name:'Tsports',logo:'https://cdn.phototourl.com/free/2026-07-13-02e6d7fe-fe97-4a0e-9b12-779aa52950f4.png',url:'http://103.165.93.31:8095/tsports/tracks-v1a1a2/mono.m3u8'},
+{name:'CCTV 5',logo:'https://cdn.phototourl.com/free/2026-07-15-be4f9833-62a9-4e56-8c75-f3d3b9412f54.jpg',url:'https://live01-cn-ali.bvjicd.com/live/79361366.m3u8'},
+{name:'COCA TV',logo:'https://cdn.phototourl.com/free/2026-07-15-be4f9833-62a9-4e56-8c75-f3d3b9412f54.jpg',url:'https://live05.miekgo.app/live/78905744.m3u8'},
+{name:'Koora city',logo:'https://cdn.phototourl.com/free/2026-07-15-be4f9833-62a9-4e56-8c75-f3d3b9412f54.jpg',url:'https://te.zeworad.site/risse2_360/index.m3u8'},
+{name:'BTV',logo:'https://cdn.phototourl.com/free/2026-07-13-e54d659e-382e-4d9f-910a-7cc2b0304042.png',url:'http://103.165.93.31:8095/btv/tracks-v1a1/mono.m3u8'},
+{name:'Bein Sports 1',logo:'https://cdn.phototourl.com/free/2026-07-16-9ebbb7cc-1ab9-4dd6-8bcc-12416c98c1fe.png',url:'http://1nyaler.streamhostingcdn.top/stream/23/index.m3u8'},
+{name:'Bein Sports 3',logo:'https://cdn.phototourl.com/free/2026-07-13-23e569af-acb1-474d-9b19-ac660eabc567.png',url:'https://ua.online24.pm/play/1103/350B326FB34F4B8/video.m3u8'},
+{name:'Enterr10 Bangla',logo:'https://cdn.phototourl.com/member/2026-07-13-2e75e916-476d-4b03-bec7-3e958e39fb19.jpg',url:'https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_720p/chunks.m3u8'},
+{name:'Zee Bangla Cinema',logo:'https://cdn.phototourl.com/member/2026-07-13-7d918e85-6505-4ea5-8c00-e59e55b44975.jpg',url:'https://stream.ottplus.live/live/zee_bangla_cinema_abr/live/zee_bangla_cinema_720/chunks.m3u8'},
+{name:'Fox Sports',logo:'https://cdn.phototourl.com/free/2026-07-13-faacfaad-3d44-4206-afb9-f9801c46fa64.png',url:'https://d1jzu95oc8fgt3.cloudfront.net/FOX_Sports1080p.m3u8'},
+{name:'Sony Sports 1',logo:'https://cdn.phototourl.com/free/2026-07-13-b077dea4-976a-49e3-94ec-7e9938dd795b.jpg',url:'https://stream.ottplus.live/live/ten_1_hd_abr/live/ten_1_hd_720/chunks.m3u8'},
+{name:'Sony Sports 2',logo:'https://cdn.phototourl.com/free/2026-07-13-82a4f3cf-b164-4ca7-8474-483a59cc1b6f.jpg',url:'https://stream.ottplus.live/live/ten_2_hd_abr/live/ten_2_hd_720/chunks.m3u8'},
+{name:'Sony Sports 5',logo:'https://cdn.phototourl.com/free/2026-07-13-a32c8c59-99b3-40f0-97fa-713ce7c870c5.jpg',url:'https://stream.ottplus.live/live/ten_5_hd_abr/live/ten_5_hd_720/chunks.m3u8'},
+{name:'SONY MAX',logo:'https://cdn.phototourl.com/member/2026-07-13-f9aabb17-899b-4bf0-8820-d5570fd7d7e7.jpg',url:'https://stream.ottplus.bd/live/sony_max_sd_abr/live/sony_max_sd_720/chunks.m3u8'},
+{name:'SONY MAX HD',logo:'https://cdn.phototourl.com/member/2026-07-13-5c41bd03-17cc-4861-8b32-2cf677f7690a.webp',url:'https://stream.ottplus.bd/live/max_hd_abr/live/max_hd_720/chunks.m3u8'},
+{name:'SONY MAX 2',logo:'https://cdn.phototourl.com/member/2026-07-13-398b13be-159e-4737-b66a-778e246c7595.jpg',url:'https://stream.ottplus.bd/live/max_2_abr/live/max_2_720/chunks.m3u8'},
+{name:'SONY SAB',logo:'https://cdn.phototourl.com/member/2026-07-13-c51be94c-82c4-4219-ae1e-435d84bde0f6.jpg',url:'https://stream.ottplus.bd/live/sub_hd_abr/live/sony_sub_hd_720/chunks.m3u8'},
+{name:'SONY AATH',logo:'https://cdn.phototourl.com/member/2026-07-13-6b2c613d-aa27-4064-b7b5-c3a006875e41.jpg',url:'https://stream.ottplus.bd/live/sony_aath_abr/live/sony_aath_720/chunks.m3u8'},
+{name:'SONY YAY',logo:'https://cdn.phototourl.com/free/2026-07-14-c33f1360-da38-4964-b142-31857c42cbb9.jpg',url:'https://stream.ottplus.bd/live/sony_yay_abr/live/sony_yay_720/chunks.m3u8'},
+{name:'Sony BBC EATH',logo:'https://cdn.phototourl.com/member/2026-07-14-1c78f4af-c4a1-46f7-8288-6cddf64a14af.jpg',url:'https://stream.ottplus.bd/live/bbc_earth_hd_abr/live/sony_bbc_earth_hd_720/chunks.m3u8'},
+{name:'SONY PIX',logo:'https://cdn.phototourl.com/member/2026-07-14-5ddbca65-9260-4301-b7ab-3c89d16974a0.jpg',url:'https://stream.ottplus.bd/live/pix_hd_abr/live/sony_pix_hd_720/chunks.m3u8'},
+{name:'SONY MOVIES',logo:'https://cdn.phototourl.com/member/2026-07-14-b92e8b5a-f26b-46e5-a65b-4b4b2a66f38c.png',url:'https://a-cdn.klowdtv.com/live1/smc_720p/chunks.m3u8'},
+{name:'& Pictures',logo:'https://cdn.phototourl.com/member/2026-07-14-9d333f7c-d6a2-4f2a-82a0-e6774979d179.jpg',url:'https://stream.ottplus.bd/live/and_picture_hd_abr/live/and_picture_hd_720/chunks.m3u8'},
+{name:'&TV',logo:'https://cdn.phototourl.com/member/2026-07-14-31579fe4-027a-4623-92cd-83f7e1d623e8.jpg',url:'https://stream.ottplus.bd/live/and_tv_hd_abr/live/and_tv_hd_720/chunks.m3u8'},
+{name:'Z BANGLA',logo:'https://cdn.phototourl.com/member/2026-07-14-172ab4b8-16da-498e-9caa-6ec6bebed5c6.png',url:'https://stream.ottplus.bd/live/zee_bangla_abr/live/zee_bangla_720/chunks.m3u8'},
+{name:'Z Bangla Soner',logo:'https://cdn.phototourl.com/member/2026-07-13-7d918e85-6505-4ea5-8c00-e59e55b44975.jpg',url:'https://stream.ottplus.bd/live/zee_bangla_cinema_abr/live/zee_bangla_cinema_720/chunks.m3u8'},
+{name:'Z Bollywood',logo:'https://cdn.phototourl.com/member/2026-07-14-29f0ef61-dbd8-4ad8-ace8-cecbc98c6bf5.png',url:'https://stream.ottplus.bd/live/zee_bangla_cinema_abr/live/zee_bangla_cinema_720/chunks.m3u8'},
+{name:'Z Cinema HD',logo:'https://cdn.phototourl.com/member/2026-07-14-89a6bb42-6f6f-4459-8486-3499bce0ba00.png',url:'https://stream.ottplus.bd/live/zee_cinema_hd_abr/live/zee_cinema_hd_720/chunks.m3u8'},
+{name:'Z TV',logo:'https://cdn.phototourl.com/member/2026-07-14-5980a07f-e192-41e8-a35f-28dd9562095b.jpg',url:'https://stream.ottplus.bd/live/zee_tv_hd_abr/live/zee_tv_hd_720/chunks.m3u8'},
+{name:'Z Action',logo:'https://cdn.phototourl.com/member/2026-07-14-54ad8c75-1b2d-48b0-9c6b-1e518d6f1ec0.webp',url:'https://stream.ottplus.bd/live/zee_action_abr/live/zee_action_720/chunks.m3u8'},
+{name:'Z News',logo:'https://cdn.phototourl.com/member/2026-07-14-91c08070-2dfc-426d-b432-7f12c4f33cfb.jpg',url:'https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8'},
+{name:'ZEE ANMOL',logo:'https://cdn.phototourl.com/member/2026-07-14-de8f8423-0740-454c-898c-8cebc7b108c3.png',url:'https://stream.ottplus.bd/live/zee_anmol_abr/live/zee_anmol_720/chunks.m3u8'},
+{name:'ZING',logo:'https://cdn.phototourl.com/member/2026-07-14-9d16cca8-8b72-4455-9d68-b8286a5e545c.jpg',url:'https://stream.ottplus.bd/live/zing_sd_abr/live/zing_sd_720/chunks.m3u8'},
+{name:'Z CAFE',logo:'https://cdn.phototourl.com/member/2026-07-14-f51a21ec-1b4a-4b1b-bd61-dab847a772e1.jpg',url:'https://stream.ottplus.bd/live/zee_cafe_hd_abr/live/zee_cafe_720/chunks.m3u8'},
+{name:'ZEE ONE',logo:'https://cdn.phototourl.com/member/2026-07-14-2e1ea756-923b-41d8-9381-dfdfa25622ab.jpg',url:'https://amg17931-zee-amg17931c6-samsung-au-8872.playouts.now.amagi.tv/ts-eu-w1-n2/playlist/amg17931-asiatvusaltdfast-zeeworld-samsungau/cb573d1e786c678f9bd43d6fcef04382847b3dcb0e6c886470af4a9765d97800dbe8ae84ae5b910c4c9e1fc061017d360439cd1dd56c49c1da63b820743c4b21fdcde00080dd0d0cb1df11292ca36265299a7369cc350f7bd2ec5a2f803ebe764c53cb017c593f88f258a9734cc59e0a957f39e8fc8b307b24455a9c5a43e6a64cb7fbe45f46de39a2e2014a9c794dfa83439fd501e984dd5d83468027f31299c3f18d8541d7e4ef598d6f77a02022405fbdc213b1c853b1d69b6d3c8f795a297437c790e335caa1e43d277debf6cac505b5739cc84d290146e935c8054de3dd4bd31b4d0fca325a8dff082b18b7cd5a2e03a8e4ab8bc1f852d769d6adf3d47f7098b94136178925ef2b253c9fead854aaf755c7e66dd5ef292a31cec711c0ddaad5bbf9cd6b8c35c6c2c39d3f6947774b57d50aecc93b9b61f6509ce33f6d1c414da69f15e383da553f2b0fa5884cdb1e1ef68adfd6915e759a2e4b1adb61df5a176583613f2bab7eafe84906e311038b3132ec4b75d1128edf02c1e78ab5486bcf9dad24d860e0b206d78c728a652e560fb6b2611f724573d4e1711e721ee740f7d8deee670363bdae991ea1f882fd97714bfe805407f27229b76f127f090567ff/194/1920x1080_4362312/index.m3u8'},
+{name:'HBO 2',logo:'https://cdn.phototourl.com/free/2026-07-14-0457200d-6e37-453e-a098-1fcd75c31ad5.png',url:'https://cdn01.medialive.one:2096/HBO2FHD/tracks-v1a1/mono.ts.m3u8'},
+{name:'HBO 3',logo:'https://cdn.phototourl.com/free/2026-07-14-96a8a610-dfd0-47c7-a530-4ba8207f5a2f.png',url:'https://cdn01.medialive.one:2096/HBO3FHD/tracks-v1a1/mono.ts.m3u8'},
+{name:'MOVIES SPHERE UK',logo:'https://cdn.phototourl.com/free/2026-07-14-3e45efef-b7e2-4466-bf95-c490ce9ceb12.png',url:'https://moviesphereuk-samsunguk.amagi.tv/en-vtt/index.m3u8'},
+{name:'Originals',logo:'https://cdn.phototourl.com/free/2026-07-14-695a4d3c-8614-4802-9b5c-95d4d328f3b5.jpg',url:'https://nomawnoijl.gpcdn.net/akash/originals/chunks.m3u8'},
+{name:'Discovery',logo:'https://cdn.phototourl.com/free/2026-07-14-11e937ee-e83b-4044-9ef8-0ba362804933.jpg',url:'https://stream.ottplus.bd/live/discovery_sd_abr/live/discovery_sd/chunks.m3u8'},
+{name:'Asharq Discovery',logo:'https://cdn.phototourl.com/free/2026-07-14-ca0e40a5-f283-4813-ba5a-1b704d90baae.jpg',url:'https://svs.itworkscdn.net/asharqdiscoverylive/asharqd.smil/asharqdiscoverypublish/asharqd_480p/chunks_dvr.m3u8'},
+{name:'Discovery Asia',logo:'https://cdn.phototourl.com/member/2026-07-14-e2ce8fa0-cce0-4fa6-b027-2ad98b8d8eb6.png',url:'cdn4.skygo.mn/live/disk1/Discovery_Asia/HLSv3-FTA/Discovery_Asia-avc1_3000000=67-mp4a_256000_eng=12.m3u8'},
+{name:'Discovery HD',logo:'https://cdn.phototourl.com/member/2026-07-14-81470bee-f586-4943-9440-20d1874c9d06.png',url:'https://stream.ottplus.bd/live/discovery_hd_abr/live/discovery_hd/chunks.m3u8'},
+{name:'Discovery HD Investigation',logo:'https://cdn.phototourl.com/member/2026-07-14-6c1da004-8db4-48d9-a14e-8bc24a42cb53.png',url:'https://stream.ottplus.bd/live/id_hd_abr/live/id_hd/chunks.m3u8'},
+{name:'Discovery Seience',logo:'https://cdn.phototourl.com/member/2026-07-14-9e6930db-3cea-4d77-95ff-201403717ee8.jpg',url:'https://stream.ottplus.bd/live/discovery_science_abr/live/discovery_science/chunks.m3u8'},
+{name:'Discovery Turbo',logo:'https://cdn.phototourl.com/member/2026-07-14-72131600-ce53-4cf4-8493-5eae0aad09b0.jpg',url:'https://stream.ottplus.bd/live/discovery_turbo_abr/live/discovery_turbo_720/chunks.m3u8'},
+{name:'BBC EARTH',logo:'https://cdn.phototourl.com/free/2026-07-14-a2c77185-85cc-4e9d-bb05-71a2d2192f9b.jpg',url:'https://amg00793-amg00793c6-xumo-us-2669.playouts.now.amagi.tv/BBCStudios-BBCEarthA-hls/playlist540p.m3u8'},
+{name:'Animal Planet',logo:'https://cdn.phototourl.com/free/2026-07-14-0fb430a7-fe11-4d96-8cae-d87a5a290d21.png',url:'https://stream.ottplus.bd/live/animal_planet_sd_abr/live/animal_plnet_sd/chunks.m3u8'},
+{name:'Animal Planet HD',logo:'https://cdn.phototourl.com/free/2026-07-14-dfdd075f-7aa5-455f-8198-3e1765863db7.png',url:'https://stream.ottplus.bd/live/animal_planet_hd_abr/live/animal_planet_hd/chunks.m3u8'},
+{name:'Cartoon Network HD',logo:'https://cdn.phototourl.com/member/2026-07-14-370df884-6f40-4063-beeb-37f189b7ff35.png',url:'https://stream.ottplus.bd/live/cn_hd_abr/live/cn_hd/chunks.m3u8'},
+{name:'Cartoon Network',logo:'https://cdn.phototourl.com/member/2026-07-14-953515fa-3179-4ee7-8549-cd01d5627ae8.png',url:'https://stream.ottplus.bd/live/cn_sd_abr/live/cn_sd/chunks.m3u8'},
+{name:'Discovery Kids',logo:'https://cdn.phototourl.com/member/2026-07-14-397fb18c-1e1a-442f-b104-ea724ffb89af.jpg',url:'https://stream.ottplus.bd/live/discovery_kids_abr/live/discovery_kids/chunks.m3u8'},
+{name:'Funny Junior HD',logo:'https://cdn.phototourl.com/member/2026-07-14-c4026e69-513c-403e-94d6-f92f7379a148.png',url:'https://nomawnoijl.gpcdn.net/akash/funnyjunior/chunks.m3u8'},
+{name:'Tom and Jerry',logo:'https://cdn.phototourl.com/member/2026-07-14-0d0c86ef-32f8-40fb-999c-92cf681f2621.jpg',url:'https://live20.bozztv.com/giatvplayout7/giatv-208314/tracks-v1a1/mono.ts.m3u8'},
+{name:'Gopal Bhar',logo:'https://cdn.phototourl.com/member/2026-07-14-b4601fb8-ac13-4142-a9af-b4b26cec872a.jpg',url:'https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8'},
+{name:'NIKKY',logo:'https://cdn.phototourl.com/member/2026-07-14-768eb939-da25-45c0-8c45-c45803c48427.jpg',url:'https://nomawnoijl.gpcdn.net/akash/nikky/chunks.m3u8'},
+{name:'Kids Stars',logo:'https://cdn.phototourl.com/member/2026-07-14-b254d844-6451-43e1-b2b6-d2d010a25107.jpg',url:'https://nomawnoijl.gpcdn.net/akash/kidsstars/chunks.m3u8'},
+{name:'PBS KIDS',logo:'https://cdn.phototourl.com/member/2026-07-14-d24980d3-ad09-453f-8e13-dd56c1024359.png',url:'https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/chunklist_b2000000_DVR.m3u8'},
+{name:'POGO',logo:'https://cdn.phototourl.com/member/2026-07-14-695430d9-db25-4ff3-bdf6-5792ee6ed57b.png',url:'https://stream.ottplus.bd/live/pogo_sd_abr/live/pogo_sd/chunks.m3u8'},
+{name:'JOY',logo:'https://cdn.phototourl.com/member/2026-07-15-28181f41-d1d7-4ef7-b056-0711834f8998.png',url:'https://nomawnoijl.gpcdn.net/akash/joy/chunks.m3u8'},
+{name:'TINY POP',logo:'https://cdn.phototourl.com/member/2026-07-15-9727d91f-1a04-4d39-add2-69e0abba3191.png',url:'https://amg01753-narrativeuk-amg01753c1-rakuten-uk-2339.playouts.now.amagi.tv/480p/index.m3u8'},
+{name:'Oscer Movies',logo:'https://cdn.phototourl.com/member/2026-07-15-c43f1809-2543-4e10-872f-55a1987cb137.jpg',url:'https://cdn-4.pishow.tv/live/233/233_0.m3u8'},
+{name:'B4U Movies',logo:'https://cdn.phototourl.com/member/2026-07-15-ab6653d4-dde8-47b3-9716-5d29307c8f85.jpg',url:'https://amg00877-b4unew-amg00877c2-xiaomi-in-5489.playouts.now.amagi.tv/480p/index.m3u8'},
+{name:'Goldmines Movies',logo:'https://cdn.phototourl.com/member/2026-07-15-f2777bf0-15e6-4c33-875d-64920c781447.jpg',url:'https://cdn-2.pishow.tv/live/1459/master.m3u8'},
+{name:'Sheemaro Bollywood',logo:'https://cdn.phototourl.com/member/2026-07-15-462a40ba-0ffb-46bd-b5a9-ca2f703af49e.png',url:'https://amg00864-shemarooenterta-shemabollywood-ono-nlwbw.amagi.tv/playlist/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8'},
+{name:'English HD Movies',logo:'https://cdn.phototourl.com/free/2026-07-15-1b3f1941-6868-48a6-9b4d-a951413d6ffe.jpg',url:'https://nomawnoijl.gpcdn.net/akash/originals/playlist.m3u8'},
+{name:'Screem Movies',logo:'https://cdn.phototourl.com/free/2026-07-15-50ce1e04-69a1-4c06-87cb-45f1b415b182.jpg',url:'https://nomawnoijl.gpcdn.net/akash/screem/playlist.m3u8'},
+{name:'Cineedge Movies',logo:'https://cdn.phototourl.com/free/2026-07-15-f8143782-d125-40a5-8230-2735b76dfa34.png',url:'https://nomawnoijl.gpcdn.net/akash/cineedge/playlist.m3u8'},
+{name:'UNIQUES MOVIES',logo:'https://cdn.phototourl.com/free/2026-07-15-a41ed0a0-e4dd-444d-bb51-98da96c4e244.png',url:'https://nomawnoijl.gpcdn.net/akash/uniques/playlist.m3u8'},
+{name:'HD Movies 2',logo:'https://cdn.phototourl.com/free/2026-07-15-a2822b81-9778-4e7f-984a-e29411e0ecd0.png',url:'https://nomawnoijl.gpcdn.net/akash/originals/playlist.m3u8'},
+{name:'HD Movies 3',logo:'https://cdn.phototourl.com/free/2026-07-15-af02577d-3507-4048-ac34-79160ad2c142.png',url:'https://nomawnoijl.gpcdn.net/akash/superrix/playlist.m3u8'}];
+const v=document.getElementById('v');let h;const grid=document.getElementById('grid');channels.forEach((c,i)=>{grid.innerHTML+=`<div class="card" onclick="play(${i})"><img src="${c.logo}" alt=""><div class="n">${c.name}</div></div>`});
+function play(i){let u=channels[i].url;if(h){h.destroy();h=null;}
+if(u.endsWith('.m3u8')){if(Hls.isSupported()){h=new Hls();h.loadSource(u);h.attachMedia(v);}else{v.src=u;}}
+else{v.src=u;}v.play().catch(()=>{});}
+play(0);
+</script></body></html>
